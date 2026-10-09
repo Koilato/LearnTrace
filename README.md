@@ -18,5 +18,6 @@
 - `notes/linux-security/privilege-separation.md`：权限分离与最小权限
 - `notes/linux-security/hypervisor-vs-container.md`：Hypervisor、vCPU 与容器
 - `notes/linux-security/linux-namespaces-kernel-lookup.md`：Linux Namespace 内核查找与隔离机制
+- `notes/linux-security/netfilter-iptables.md`：Netfilter/iptables 内核报文路径、Conntrack、NAT 与审计（附 SVG 图）
 
 > SQL 基础已掌握，不重复记录。
