@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="860" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+<title id="title">Linux Netfilter / iptables 网络报文处理路径</title>
+<desc id="desc">三种路径：入站本机 PREROUTING 路由 INPUT；转发 PREROUTING 路由 FORWARD POSTROUTING；本机发包路由 OUTPUT POSTROUTING。</desc>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,1 L8,5 L0,9" fill="none" stroke="#334155" stroke-width="1.8"/></marker>
+  <style>
+    .t{font-family:Inter,'Noto Sans SC','Microsoft YaHei',sans-serif;fill:#0f172a}
+    .ttl{font-size:31px;font-weight:700}.sub{font-size:17px;fill:#475569}.lane{font-size:23px;font-weight:700}
+    .b{font-size:19px;font-weight:700}.s{font-size:15px;fill:#475569}
+    .box{stroke-width:1.4;rx:13}.a{fill:#e0f2fe;stroke:#0284c7}.b2{fill:#dcfce7;stroke:#16a34a}
+    .c{fill:#fef3c7;stroke:#d97706}.d{fill:#ede9fe;stroke:#7c3aed}.neutral{fill:#f1f5f9;stroke:#94a3b8}
+    .flow{fill:none;stroke:#334155;stroke-width:2.4;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect width="1440" height="860" fill="#ffffff"/>
+<rect x="20" y="17" width="1400" height="826" rx="22" fill="#f8fafc" stroke="#e2e8f0"/>
+<text class="t ttl" x="56" y="67">Linux Netfilter / iptables：报文在内核中的三条路径</text>
+<text class="t sub" x="56" y="98">Routing 决定去向；Netfilter Hook 决定何时执行规则；iptables 是配置接口（图省略 raw / mangle / Conntrack 等完整细节）</text>
+<rect x="50" y="134" width="1340" height="182" rx="16" fill="#fff" stroke="#bfdbfe"/>
+<text class="t lane" x="73" y="171">① 外部流量访问本机</text>
+<g>
+<rect class="box neutral" x="71" y="197" width="184" height="75"/><text class="t b" x="163" y="225" text-anchor="middle">外部网络</text><text class="t s" x="163" y="248" text-anchor="middle">Ingress</text>
+<rect class="box b2" x="302" y="197" width="210" height="75"/><text class="t b" x="407" y="225" text-anchor="middle">PREROUTING</text><text class="t s" x="407" y="248" text-anchor="middle">DNAT 可发生于此</text>
+<rect class="box c" x="557" y="197" width="195" height="75"/><text class="t b" x="654" y="225" text-anchor="middle">Routing</text><text class="t s" x="654" y="248" text-anchor="middle">判定目的为本机</text>
+<rect class="box a" x="799" y="197" width="188" height="75"/><text class="t b" x="893" y="225" text-anchor="middle">INPUT</text><text class="t s" x="893" y="248" text-anchor="middle">filter 访问控制</text>
+<rect class="box neutral" x="1035" y="197" width="300" height="75"/><text class="t b" x="1185" y="225" text-anchor="middle">本地进程 / Socket</text><text class="t s" x="1185" y="248" text-anchor="middle">Local Delivery</text>
+<path class="flow" d="M255 234 H302 M512 234 H557 M752 234 H799 M987 234 H1035"/>
+</g>
+<rect x="50" y="333" width="1340" height="182" rx="16" fill="#fff" stroke="#bbf7d0"/>
+<text class="t lane" x="73" y="371">② 外部流量经本机转发</text>
+<g>
+<rect class="box neutral" x="71" y="395" width="184" height="75"/><text class="t b" x="163" y="425" text-anchor="middle">外部网络</text><text class="t s" x="163" y="447" text-anchor="middle">Ingress</text>
+<rect class="box b2" x="302" y="395" width="210" height="75"/><text class="t b" x="407" y="425" text-anchor="middle">PREROUTING</text><text class="t s" x="407" y="447" text-anchor="middle">DNAT</text>
+<rect class="box c" x="557" y="395" width="195" height="75"/><text class="t b" x="654" y="425" text-anchor="middle">Routing</text><text class="t s" x="654" y="447" text-anchor="middle">判定需要转发</text>
+<rect class="box a" x="799" y="395" width="188" height="75"/><text class="t b" x="893" y="425" text-anchor="middle">FORWARD</text><text class="t s" x="893" y="447" text-anchor="middle">filter 转发控制</text>
+<rect class="box b2" x="1035" y="395" width="300" height="75"/><text class="t b" x="1185" y="425" text-anchor="middle">POSTROUTING</text><text class="t s" x="1185" y="447" text-anchor="middle">SNAT → 发往下一跳</text>
+<path class="flow" d="M255 432 H302 M512 432 H557 M752 432 H799 M987 432 H1035"/>
+</g>
+<rect x="50" y="532" width="1340" height="182" rx="16" fill="#fff" stroke="#ddd6fe"/>
+<text class="t lane" x="73" y="569">③ 本机进程主动发送报文</text>
+<g>
+<rect class="box neutral" x="71" y="595" width="184" height="75"/><text class="t b" x="163" y="625" text-anchor="middle">本地进程</text><text class="t s" x="163" y="647" text-anchor="middle">Local Socket</text>
+<rect class="box c" x="302" y="595" width="210" height="75"/><text class="t b" x="407" y="625" text-anchor="middle">Initial Routing</text><text class="t s" x="407" y="647" text-anchor="middle">初始路由选择</text>
+<rect class="box a" x="557" y="595" width="195" height="75"/><text class="t b" x="654" y="625" text-anchor="middle">OUTPUT</text><text class="t s" x="654" y="647" text-anchor="middle">可能修改目的地址</text>
+<rect class="box b2" x="799" y="595" width="188" height="75"/><text class="t b" x="893" y="625" text-anchor="middle">POSTROUTING</text><text class="t s" x="893" y="647" text-anchor="middle">SNAT</text>
+<rect class="box neutral" x="1035" y="595" width="300" height="75"/><text class="t b" x="1185" y="625" text-anchor="middle">出站网络</text><text class="t s" x="1185" y="647" text-anchor="middle">Egress / NIC</text>
+<path class="flow" d="M255 632 H302 M512 632 H557 M752 632 H799 M987 632 H1035"/>
+</g>
+<text class="t b" x="60" y="763">判定依据：</text>
+<text class="t sub" x="168" y="763">目标地址 + FIB / Policy Routing + Network Namespace + 转发配置</text>
+<text class="t b" x="60" y="801">核心区别：</text>
+<text class="t sub" x="168" y="801">PREROUTING / INPUT / FORWARD / OUTPUT / POSTROUTING 是 Hook；nat / filter / mangle 等是表。</text>
+</svg>
