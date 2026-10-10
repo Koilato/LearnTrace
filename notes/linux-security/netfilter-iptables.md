@@ -1,10 +1,12 @@
 # Netfilter / iptables：内核报文路径与规则执行
 
+![Linux Netfilter / iptables 网络报文处理流程（SVG）](assets/netfilter-iptables-flow.svg)
+
+> [查看 ChatGPT 分享的原版流程图](https://chatgpt.com/s/m_6ac9a4ecac388191b3fdd4c53c57940c)（原版 PNG 未托管在 GitHub；上方为可直接预览的矢量重绘图）。
+
 ## 一句话
 
 **Netfilter 是 Linux 网络协议栈中的 Hook 框架；iptables 是配置 Xtables/nf_tables 规则的用户空间入口；Routing 决定报文去哪里，filter 决定是否放行，Conntrack/NAT 维持连接级状态。**
-
-![Linux Netfilter 报文路径（SVG 重绘图）](assets/netfilter-iptables-flow.svg)
 
 ## 原理
 
