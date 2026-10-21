@@ -12,9 +12,11 @@
 3. [入口点和异常入口点](pe-entrypoint.md)：如何判断入口点是否落在可执行节区。
 4. [FOA、RVA、VA](pe-addresses.md)：文件位置与进程内存地址如何对应。
 5. [静态启发式检测 Demo](pe-heuristic-demo.md)：熵、权限、导入 API 的规则、测试方式与不足。
+6. [PE 加壳与运行时解包](pe-packing-unpacking.md)：Stub 如何在内存中恢复代码，是否依赖外部程序。
+7. [EDR 行为观测与检测决策](edr-observation-vs-detection.md)：事件采集、行为关联、规则与风险评分之间的区别。
 
 ## 阅读路径
-初学：PE 文件 → 节区权限 → 入口点 → 地址转换 → 启发式 Demo；再回到 [EDR 发展史](README.md)。
+初学：PE 文件 → 节区权限 → 入口点 → 地址转换 → 加壳解包 → 启发式 Demo → 行为观测与打分；再回到 [EDR 发展史](README.md)。
 
 ## 维护约定
 - 每篇只解决一个问题；固定结构：**一句话 / 原理 / 审计 / 易错**。
