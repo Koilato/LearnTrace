@@ -13,6 +13,8 @@
 
 ## 目录
 
+- `notes/edr/README.md`：EDR 技术发展史（1980s—2026）、各阶段痛点、技术原理与工程落地
+
 - `notes/database-security/parameterized-query.md`：参数化查询
 - `notes/database-security/orm-basics.md`：ORM 基础与安全审计入口
 - `notes/linux-security/privilege-separation.md`：权限分离与最小权限
