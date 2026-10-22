@@ -24,3 +24,7 @@
 - `notes/linux-security/netfilter-iptables.md`：Netfilter/iptables 内核报文路径、Conntrack、NAT 与审计（附 SVG 图）
 
 > SQL 基础已掌握，不重复记录。
+
+## 可复现实验
+
+- [静态 PE 启发式 Demo](notes/edr/pe-heuristic-demo.md)：Python ≥3.10；`python -m pip install -r requirements.txt` 后运行 `python -m unittest discover -s tests -v`。仅静态读取文件，教学规则不代表真实产品能力。
