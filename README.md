@@ -24,3 +24,4 @@
 - `notes/linux-security/netfilter-iptables.md`：Netfilter/iptables 内核报文路径、Conntrack、NAT 与审计（附 SVG 图）
 
 > SQL 基础已掌握，不重复记录。
+- [`notes/web-security/browser-fingerprinting.md`](notes/web-security/browser-fingerprinting.md)：浏览器指纹 L1–L12 字段、真实值示例、跨层一致性及安全审计
