@@ -24,7 +24,9 @@
 - `notes/linux-security/netfilter-iptables.md`：Netfilter/iptables 内核报文路径、Conntrack、NAT 与审计（附 SVG 图）
 
 > SQL 基础已掌握，不重复记录。
+- [`notes/web-security/browser-fingerprinting.md`](notes/web-security/browser-fingerprinting.md)：浏览器指纹 L1–L12 字段、真实值示例、跨层一致性及安全审计
 
 ## 可复现实验
 
 - [静态 PE 启发式 Demo](notes/edr/pe-heuristic-demo.md)：Python ≥3.10；`python -m pip install -r requirements.txt` 后运行 `python -m unittest discover -s tests -v`。仅静态读取文件，教学规则不代表真实产品能力。
+- [EDR 机制实验](notes/edr/experiments/README.md)：Python ≥3.10 标准库实现；另行运行 `python -m unittest discover -s notes/edr/experiments -p 'test_*.py' -v`，覆盖 CPU 模拟、IOC、事件关联、PE 解析和响应状态。
