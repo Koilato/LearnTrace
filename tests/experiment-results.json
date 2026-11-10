@@ -1,0 +1,343 @@
+{
+  "recorded_at_utc": "2026-10-22T14:50:05.621079+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "implementation": "CPython",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "pefile": "2024.8.26",
+  "command": "python -m tests.run_experiment",
+  "source_sha256": {
+    "pe_heuristic_demo.py": "6c8cc93e86463d80311df7f1991c0b88b92f7882229bd2741ff5e0b404a87268",
+    "tests/pe_fixtures.py": "97af08e68cd52676a8a2e52b6ee5bb9d59da6125f1c40c58ca9576ad26777244",
+    "tests/test_pe_heuristic_demo.py": "7374d03c1223d848b6dbf8e7366c8b146202c0f1c8fb6e66a95f524ee32e6484",
+    "tests/run_experiment.py": "757eeee05996c27e776c32efc7d6422886ad50b7e721efca7ee44e17aeed5240"
+  },
+  "tests_run": 20,
+  "test_success": true,
+  "test_output": "test_cli (test_pe_heuristic_demo.CLITests.test_cli) ... ok\ntest_end_to_end_thresholds (test_pe_heuristic_demo.ParserTests.test_end_to_end_thresholds) ... ok\ntest_entrypoint_boundaries (test_pe_heuristic_demo.ParserTests.test_entrypoint_boundaries) ... ok\ntest_incomplete_header_layout (test_pe_heuristic_demo.ParserTests.test_incomplete_header_layout) ... ok\ntest_invalid_import_directory_and_thunks (test_pe_heuristic_demo.ParserTests.test_invalid_import_directory_and_thunks) ... ok\ntest_invalid_input (test_pe_heuristic_demo.ParserTests.test_invalid_input) ... ok\ntest_named_and_ordinal_imports (test_pe_heuristic_demo.ParserTests.test_named_and_ordinal_imports) ... ok\ntest_overlapping_sections (test_pe_heuristic_demo.ParserTests.test_overlapping_sections) ... ok\ntest_pe32_and_pe64_normal (test_pe_heuristic_demo.ParserTests.test_pe32_and_pe64_normal) ... ok\ntest_size_limit (test_pe_heuristic_demo.ParserTests.test_size_limit) ... ok\ntest_virtual_tail_does_not_change_disk_entropy (test_pe_heuristic_demo.ParserTests.test_virtual_tail_does_not_change_disk_entropy) ... ok\ntest_entropy_boundaries (test_pe_heuristic_demo.RulesTests.test_entropy_boundaries) ... ok\ntest_entropy_math (test_pe_heuristic_demo.RulesTests.test_entropy_math) ... ok\ntest_entrypoint (test_pe_heuristic_demo.RulesTests.test_entrypoint) ... ok\ntest_imports (test_pe_heuristic_demo.RulesTests.test_imports) ... ok\ntest_invalid_features (test_pe_heuristic_demo.RulesTests.test_invalid_features) ... ok\ntest_normal (test_pe_heuristic_demo.RulesTests.test_normal) ... ok\ntest_permissions (test_pe_heuristic_demo.RulesTests.test_permissions) ... ok\ntest_sections_accumulate (test_pe_heuristic_demo.RulesTests.test_sections_accumulate) ... ok\ntest_threshold_39_and_40 (test_pe_heuristic_demo.RulesTests.test_threshold_39_and_40) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.320s\n\nOK\n",
+  "cases": [
+    {
+      "input": "normal_pe32",
+      "fixture_parameters": {},
+      "bytes": 1536,
+      "sha256": "bbb0f9e3c64d1ff6412ed33c47cf27ae83a5bafdffdc976cc5108520043d9a50",
+      "expected": {
+        "score": 0,
+        "verdict": "LOW_RISK"
+      },
+      "actual": {
+        "score": 0,
+        "verdict": "LOW_RISK",
+        "hits": []
+      },
+      "passed": true
+    },
+    {
+      "input": "normal_pe64",
+      "fixture_parameters": {
+        "pe64": true
+      },
+      "bytes": 1536,
+      "sha256": "e637051e3bb3697c30ac20808ad04b15540a671386a931c06ee2f4e2a122a607",
+      "expected": {
+        "score": 0,
+        "verdict": "LOW_RISK"
+      },
+      "actual": {
+        "score": 0,
+        "verdict": "LOW_RISK",
+        "hits": []
+      },
+      "passed": true
+    },
+    {
+      "input": "high_entropy_rwx",
+      "fixture_parameters": {
+        "high_entropy": true,
+        "writable": true
+      },
+      "bytes": 1536,
+      "sha256": "21c671b21b2b6f794063bbe600c6917fb8f1a139c9858314ee104a584c4ceefd",
+      "expected": {
+        "score": 40,
+        "verdict": "NEEDS_REVIEW"
+      },
+      "actual": {
+        "score": 40,
+        "verdict": "NEEDS_REVIEW",
+        "hits": [
+          {
+            "rule": "high_entropy",
+            "points": 20,
+            "section_index": 0
+          },
+          {
+            "rule": "writable_executable",
+            "points": 20,
+            "section_index": 0
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "nonexec_ep_wpm",
+      "fixture_parameters": {
+        "executable": false,
+        "imports": [
+          "WriteProcessMemory"
+        ]
+      },
+      "bytes": 2048,
+      "sha256": "a24c187fecbb3ce663bdc2e0c6a95ff19b136289d540edeea3aeb644e517ecb4",
+      "expected": {
+        "score": 39,
+        "verdict": "LOW_RISK"
+      },
+      "actual": {
+        "score": 39,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "non_executable_entrypoint",
+            "points": 25,
+            "section_index": 0
+          },
+          {
+            "rule": "WriteProcessMemory",
+            "points": 14,
+            "section_index": null
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "both_apis",
+      "fixture_parameters": {
+        "pe64": true,
+        "imports": [
+          "WriteProcessMemory",
+          "CreateRemoteThread"
+        ]
+      },
+      "bytes": 2048,
+      "sha256": "af30e8a154f0c912d47673245f5dfacbfed0c73ce14b5f71e072f28ad3c3c346",
+      "expected": {
+        "score": 32,
+        "verdict": "LOW_RISK"
+      },
+      "actual": {
+        "score": 32,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "WriteProcessMemory",
+            "points": 14,
+            "section_index": null
+          },
+          {
+            "rule": "CreateRemoteThread",
+            "points": 18,
+            "section_index": null
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "entropy_size_below",
+      "feature_overrides": {
+        "size": 1023,
+        "h": 8
+      },
+      "expected_score": 0,
+      "actual": {
+        "score": 0,
+        "verdict": "LOW_RISK",
+        "hits": []
+      },
+      "passed": true
+    },
+    {
+      "input": "entropy_below",
+      "feature_overrides": {
+        "h": 7.199999999999999
+      },
+      "expected_score": 0,
+      "actual": {
+        "score": 0,
+        "verdict": "LOW_RISK",
+        "hits": []
+      },
+      "passed": true
+    },
+    {
+      "input": "entropy_equal",
+      "feature_overrides": {
+        "h": 7.2
+      },
+      "expected_score": 20,
+      "actual": {
+        "score": 20,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "high_entropy",
+            "points": 20,
+            "section_index": 0
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "entropy_above",
+      "feature_overrides": {
+        "h": 7.200000000000001
+      },
+      "expected_score": 20,
+      "actual": {
+        "score": 20,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "high_entropy",
+            "points": 20,
+            "section_index": 0
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "write_only",
+      "feature_overrides": {
+        "write": true,
+        "execute": false,
+        "ep": null
+      },
+      "expected_score": 0,
+      "actual": {
+        "score": 0,
+        "verdict": "LOW_RISK",
+        "hits": []
+      },
+      "passed": true
+    },
+    {
+      "input": "execute_only",
+      "feature_overrides": {},
+      "expected_score": 0,
+      "actual": {
+        "score": 0,
+        "verdict": "LOW_RISK",
+        "hits": []
+      },
+      "passed": true
+    },
+    {
+      "input": "write_execute",
+      "feature_overrides": {
+        "write": true
+      },
+      "expected_score": 20,
+      "actual": {
+        "score": 20,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "writable_executable",
+            "points": 20,
+            "section_index": 0
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "nonexec_entrypoint",
+      "feature_overrides": {
+        "execute": false
+      },
+      "expected_score": 25,
+      "actual": {
+        "score": 25,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "non_executable_entrypoint",
+            "points": 25,
+            "section_index": 0
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "wpm",
+      "feature_overrides": {
+        "apis": [
+          "WriteProcessMemory"
+        ]
+      },
+      "expected_score": 14,
+      "actual": {
+        "score": 14,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "WriteProcessMemory",
+            "points": 14,
+            "section_index": null
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "crt",
+      "feature_overrides": {
+        "apis": [
+          "CreateRemoteThread"
+        ]
+      },
+      "expected_score": 18,
+      "actual": {
+        "score": 18,
+        "verdict": "LOW_RISK",
+        "hits": [
+          {
+            "rule": "CreateRemoteThread",
+            "points": 18,
+            "section_index": null
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "input": "empty",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected": "InvalidPE",
+      "actual": "InvalidPE",
+      "passed": true
+    },
+    {
+      "input": "non_pe",
+      "bytes": 8,
+      "sha256": "c77db70d105714ca2d483fad8f7e95f3c44fd30b5f597a86be8667bfec068a5b",
+      "expected": "InvalidPE",
+      "actual": "InvalidPE",
+      "passed": true
+    },
+    {
+      "input": "truncated_section",
+      "bytes": 1535,
+      "sha256": "27bc1f03ef25bd90c0ade03c5b0f7e7af524c6f0023667d4f4560643c39e5bd3",
+      "expected": "InvalidPE",
+      "actual": "InvalidPE",
+      "passed": true
+    }
+  ]
+}
